@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2f7d6d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="言語教育マスター" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta
+      name="description"
+      content="言語・教育の確認問題、復習、解説をスマホでも使いやすく学習できるミニアプリです。"
+    />
+    <title>言語・教育 確認問題マスター</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">課末テスト対策</p>
+        <h1>言語・教育 確認問題マスター</h1>
+      </div>
+      <div class="header-actions">
+        <button id="resetProgress" class="ghost-button" type="button">履歴リセット</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="dashboard" aria-label="進捗">
+        <div class="metric">
+          <span class="metric-label">総合正答率</span>
+          <strong id="overallRate">0%</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">全問正解まで</span>
+          <strong id="remainingCount">0問</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">連続正解</span>
+          <strong id="streakCount">0</strong>
+        </div>
+      </section>
+
+      <section class="notice" aria-label="解答について">
+        <strong>解答なし教材モード</strong>
+        <span>確認問題の正答は推定、赤本の追加問題は付属解答で照合済みです。違和感がある問題は、その場で正答を修正して保存できます。</span>
+      </section>
+
+      <section class="key-diagram" aria-label="重要図解">
+        <div class="section-heading">
+          <h2>重要図解</h2>
+          <span>第10回の人物問題</span>
+        </div>
+        <div id="keyLinguistDiagram"></div>
+      </section>
+
+      <section class="view-tabs" aria-label="表示切り替え">
+        <button id="practiceTab" class="tab-button active" type="button">練習</button>
+        <button id="summaryTab" class="tab-button" type="button">一覧</button>
+      </section>
+
+      <section id="practiceView">
+        <section class="controls" aria-label="出題設定">
+          <label>
+            回
+            <select id="roundFilter"></select>
+          </label>
+          <label>
+            モード
+            <select id="modeFilter">
+              <option value="all">全問</option>
+              <option value="unmastered">未マスターだけ</option>
+              <option value="mistakes">間違いだけ</option>
+              <option value="uncertain">自信なしだけ</option>
+            </select>
+          </label>
+          <button id="shuffleButton" type="button">並び替え</button>
+          <div class="section-status-legend" aria-label="セクション進捗の見方">
+            <span>✓ 完了</span>
+            <span>◐ 途中</span>
+            <span>○ 未着手</span>
+          </div>
+        </section>
+
+        <section class="quiz-shell">
+          <div class="progress-row">
+            <span id="positionLabel">1 / 1</span>
+            <div class="progress-track"><div id="progressBar"></div></div>
+          </div>
+
+          <article class="question-card">
+            <div class="question-meta" id="questionMeta"></div>
+            <h2 id="questionTitle"></h2>
+            <p id="questionText"></p>
+            <fieldset id="choices" class="choices"></fieldset>
+            <label class="uncertain-row">
+              <input id="uncertainCheck" type="checkbox" />
+              自信がない
+            </label>
+            <div class="button-row">
+              <button id="answerButton" type="button">回答する</button>
+              <button id="nextButton" class="ghost-button" type="button" disabled>次へ</button>
+            </div>
+          </article>
+
+          <section id="resultPanel" class="result-panel" hidden>
+            <div id="resultBadge" class="result-badge"></div>
+            <p id="answerLine"></p>
+            <p id="explanation"></p>
+            <a id="answerSourceLink" class="answer-source-link" href="#" target="_blank" hidden>解答集の該当ページを確認</a>
+            <div id="diagramPanel" class="diagram-panel" hidden></div>
+            <div class="correction-box">
+              <p>正答が違うと感じたら、選んだ選択肢を正答として保存できます。</p>
+              <button id="markSelectedCorrect" class="ghost-button" type="button">選んだ選択肢を正答に修正</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="review-list">
+          <div class="section-heading">
+            <h2>今日の弱点</h2>
+            <button id="mistakePracticeButton" class="ghost-button" type="button">間違いだけ練習</button>
+          </div>
+          <ul id="weakList"></ul>
+        </section>
+      </section>
+
+      <section id="summaryView" class="summary-view" hidden>
+        <section class="controls" aria-label="一覧設定">
+          <label>
+            一覧
+            <select id="summaryFilter">
+              <option value="all">全問</option>
+              <option value="mistakes">間違えた問題だけ</option>
+              <option value="unmastered">未マスターだけ</option>
+              <option value="uncertain">自信なしだけ</option>
+            </select>
+          </label>
+          <button id="startFilteredPractice" type="button">この条件で練習</button>
+        </section>
+        <section class="answer-list" aria-label="問題・答え・解説一覧">
+          <div class="section-heading">
+            <h2>問題・答え・解説一覧</h2>
+            <span id="summaryCount"></span>
+          </div>
+          <div id="summaryList"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./tcj-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

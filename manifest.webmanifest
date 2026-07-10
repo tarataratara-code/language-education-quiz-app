@@ -1,0 +1,26 @@
+{
+  "name": "言語・教育 確認問題マスター",
+  "short_name": "言語教育",
+  "description": "言語・教育の確認問題、復習、解説をスマホでも使いやすく学習できるミニアプリです。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f9fb",
+  "theme_color": "#2f7d6d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/maskable-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

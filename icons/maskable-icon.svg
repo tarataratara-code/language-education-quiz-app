@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="言語教育マスター">
+  <rect width="512" height="512" fill="#2f7d6d"/>
+  <circle cx="256" cy="256" r="214" fill="#ffffff"/>
+  <path d="M151 143h210v45H151v-45Zm0 82h210v28H151v-28Zm0 60h156v28H151v-28Z" fill="#1f5f54"/>
+  <circle cx="338" cy="352" r="62" fill="#f2b84b"/>
+  <path d="M313 351l20 20 41-50" fill="none" stroke="#17202a" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M187 389c24-42 47-78 67-111 20 33 43 69 67 111h-45l-22-39-22 39h-45Z" fill="#2f7d6d"/>
+</svg>

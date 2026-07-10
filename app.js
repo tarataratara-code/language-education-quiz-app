@@ -1139,7 +1139,7 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol === "file:") return;
 
-  navigator.serviceWorker.register("./sw.js").catch(() => {
+  navigator.serviceWorker.register("./sw.js?v=20260710-2").catch(() => {
     // The app still works normally if the browser blocks PWA caching.
   });
 }

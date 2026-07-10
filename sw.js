@@ -1,11 +1,11 @@
-const CACHE_NAME = "language-education-quiz-app-v3";
+const CACHE_NAME = "language-education-quiz-app-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20260710-2",
-  "./app.js?v=20260710-2",
-  "./tcj-data.js?v=20260710-2",
-  "./manifest.webmanifest?v=20260710-2",
+  "./styles.css?v=20260710-4",
+  "./app.js?v=20260710-4",
+  "./tcj-data.js?v=20260710-4",
+  "./manifest.webmanifest?v=20260710-4",
   "./icons/icon.svg",
   "./icons/maskable-icon.svg"
 ];

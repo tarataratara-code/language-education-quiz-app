@@ -764,6 +764,10 @@ function answerOf(question) {
   return Number.isInteger(overrides[question.id]) ? overrides[question.id] : question.answer;
 }
 
+function isCorrectForProgress(record) {
+  return record?.lastCorrect === true || Number(record?.correctCount) > 0;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -816,7 +820,7 @@ function renderRoundOptions() {
   const rounds = [...new Set(QUESTIONS.map((question) => question.round))];
   const options = rounds.map((round) => {
     const questions = QUESTIONS.filter((question) => question.round === round);
-    const correct = questions.filter((question) => state[question.id]?.lastCorrect === true).length;
+    const correct = questions.filter((question) => isCorrectForProgress(state[question.id])).length;
     const status = correct === questions.length
       ? "✓ 完了"
       : correct > 0
@@ -994,7 +998,7 @@ function updateDashboard() {
   const records = dashboardQuestions.map((question) => state[question.id]).filter(Boolean);
   const attempts = records.reduce((sum, record) => sum + record.attempts, 0);
   const correct = records.reduce((sum, record) => sum + record.correctCount, 0);
-  const correctQuestions = dashboardQuestions.filter((question) => state[question.id]?.lastCorrect === true).length;
+  const correctQuestions = dashboardQuestions.filter((question) => isCorrectForProgress(state[question.id])).length;
   const remaining = dashboardQuestions.length - correctQuestions;
   $("overallRate").textContent = `${correctQuestions}/${dashboardQuestions.length}`;
   $("attemptRate").textContent = attempts ? `${Math.round((correct / attempts) * 100)}%` : "0%";
@@ -1139,7 +1143,7 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol === "file:") return;
 
-  navigator.serviceWorker.register("./sw.js?v=20260710-2").catch(() => {
+  navigator.serviceWorker.register("./sw.js?v=20260710-4").catch(() => {
     // The app still works normally if the browser blocks PWA caching.
   });
 }

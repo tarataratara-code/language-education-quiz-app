@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>学習履歴の救出</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+        background: #f7f9fb;
+        color: #17202a;
+        line-height: 1.7;
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        display: grid;
+        gap: 14px;
+      }
+
+      section {
+        background: #fff;
+        border: 1px solid #d9e1ea;
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.45rem;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      button {
+        min-height: 44px;
+        border: 1px solid #2f7d6d;
+        border-radius: 6px;
+        padding: 0 14px;
+        background: #2f7d6d;
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 180px;
+        border: 1px solid #d9e1ea;
+        border-radius: 6px;
+        padding: 10px;
+        font: 0.9rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .muted {
+        color: #697386;
+        font-size: 0.92rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>学習履歴の救出</h1>
+        <p class="muted">このページは、スマホに残っている学習履歴をコピーするためのページです。</p>
+      </section>
+
+      <section>
+        <p id="status">確認中です...</p>
+        <button id="copyButton" type="button">履歴をコピー</button>
+      </section>
+
+      <section>
+        <p class="muted">コピーできない場合は、下の文字をすべて選択してコピーしてください。</p>
+        <textarea id="payload" readonly></textarea>
+      </section>
+    </main>
+
+    <script>
+      const progress = localStorage.getItem("languageEducationQuizProgress.v1") || "{}";
+      const overrides = localStorage.getItem("languageEducationQuizAnswerOverrides.v1") || "{}";
+      const state = JSON.parse(progress);
+      const payload = JSON.stringify({
+        app: "language-education-quiz-app",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        state,
+        overrides: JSON.parse(overrides),
+      });
+      const count = Object.keys(state).length;
+
+      document.getElementById("status").textContent = count
+        ? `${count}問分の履歴が見つかりました。`
+        : "このURLには履歴が見つかりませんでした。別のURLで開いていた可能性があります。";
+      document.getElementById("payload").value = payload;
+      document.getElementById("copyButton").addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(payload);
+          alert("履歴をコピーしました。新しいアプリの「履歴読み込み」に貼り付けてください。");
+        } catch {
+          document.getElementById("payload").focus();
+          document.getElementById("payload").select();
+          alert("下の文字をすべてコピーしてください。");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -381,6 +381,92 @@ button:disabled {
   text-align: center;
 }
 
+.method-lane {
+  display: grid;
+  gap: 10px;
+}
+
+.method-stage {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d8ebe5;
+  background: var(--white);
+}
+
+.method-stage strong {
+  color: var(--accent-strong);
+  font-size: 1.02rem;
+}
+
+.method-stage span {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e7f4ef;
+  color: var(--accent-strong);
+  font-weight: 800;
+  font-size: 0.84rem;
+}
+
+.method-stage em {
+  color: var(--muted);
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.method-arrow {
+  justify-self: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #22324a;
+  color: var(--white);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.method-branches {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.method-stage.old {
+  border-color: #f0c99f;
+  background: #fff9f1;
+}
+
+.method-stage.oral {
+  border-color: #b8d6e7;
+  background: #f3f9fd;
+}
+
+.method-stage.structural {
+  border-color: #c5d5f0;
+  background: #f4f7fd;
+}
+
+.method-stage.cognitive {
+  border-color: #ddd2f0;
+  background: #f8f5fd;
+}
+
+.method-stage.natural {
+  border-color: #d8e7b8;
+  background: #f8fbf1;
+}
+
+.method-stage.human {
+  border-color: #f0c8d2;
+  background: #fff5f7;
+}
+
+.method-stage.communicative {
+  border-color: #a7d5c8;
+  background: #f0faf6;
+}
+
 .mini-table {
   width: 100%;
   border-collapse: collapse;
@@ -518,6 +604,80 @@ button:disabled {
   border: 1px solid #f0c99f;
 }
 
+.score-map {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.score-card {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+
+.score-card strong {
+  font-size: 1.05rem;
+}
+
+.score-card span {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.84rem;
+}
+
+.score-card em {
+  color: var(--muted);
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.score-card.warm {
+  border-color: #f0c99f;
+  background: #fff9f1;
+}
+
+.score-card.warm span {
+  background: #fce8d1;
+  color: #8a4a12;
+}
+
+.score-card.cool {
+  border-color: #b8d6e7;
+  background: #f3f9fd;
+}
+
+.score-card.cool span {
+  background: #dff0fa;
+  color: #225c78;
+}
+
+.score-card.neutral {
+  border-color: #d9e1ea;
+  background: #f8fafc;
+}
+
+.score-card.neutral span {
+  background: #e8eef5;
+  color: #344054;
+}
+
+.score-card.strong {
+  border-color: #a7d5c8;
+  background: #f0faf6;
+}
+
+.score-card.strong span {
+  background: #dcefe9;
+  color: var(--accent-strong);
+}
+
 .review-list {
   margin-top: 16px;
   padding: 18px;
@@ -649,7 +809,9 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
-  .concept-map {
+  .concept-map,
+  .method-branches,
+  .score-map {
     grid-template-columns: 1fr;
   }
 

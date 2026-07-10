@@ -816,11 +816,11 @@ function renderRoundOptions() {
   const rounds = [...new Set(QUESTIONS.map((question) => question.round))];
   const options = rounds.map((round) => {
     const questions = QUESTIONS.filter((question) => question.round === round);
-    const mastered = questions.filter((question) => state[question.id]?.mastered).length;
-    const status = mastered === questions.length
+    const correct = questions.filter((question) => state[question.id]?.lastCorrect === true).length;
+    const status = correct === questions.length
       ? "✓ 完了"
-      : mastered > 0
-        ? `◐ 途中 ${mastered}/${questions.length}`
+      : correct > 0
+        ? `◐ 途中 ${correct}/${questions.length}`
         : "○ 未着手";
     return `<option value="${round}">${status}｜${ROUND_LABELS[round] || `第${round}回`}</option>`;
   });
@@ -994,9 +994,9 @@ function updateDashboard() {
   const records = dashboardQuestions.map((question) => state[question.id]).filter(Boolean);
   const attempts = records.reduce((sum, record) => sum + record.attempts, 0);
   const correct = records.reduce((sum, record) => sum + record.correctCount, 0);
-  const mastered = dashboardQuestions.filter((question) => state[question.id]?.mastered).length;
-  const remaining = dashboardQuestions.length - mastered;
-  $("overallRate").textContent = `${mastered}/${dashboardQuestions.length}`;
+  const correctQuestions = dashboardQuestions.filter((question) => state[question.id]?.lastCorrect === true).length;
+  const remaining = dashboardQuestions.length - correctQuestions;
+  $("overallRate").textContent = `${correctQuestions}/${dashboardQuestions.length}`;
   $("attemptRate").textContent = attempts ? `${Math.round((correct / attempts) * 100)}%` : "0%";
   $("remainingCount").textContent = `${remaining}問`;
   $("streakCount").textContent = String(currentStreak());

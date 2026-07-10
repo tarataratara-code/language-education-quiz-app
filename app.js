@@ -805,13 +805,8 @@ function init() {
     rebuild();
   });
 
-  renderKeyDiagrams();
   rebuild();
   renderSummary();
-}
-
-function renderKeyDiagrams() {
-  $("keyLinguistDiagram").innerHTML = `<div class="diagram-panel always-open"><h3>${DIAGRAMS.linguists.title}</h3><div class="diagram-grid">${DIAGRAMS.linguists.html}</div></div>`;
 }
 
 function renderRoundOptions() {
@@ -1143,7 +1138,7 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol === "file:") return;
 
-  navigator.serviceWorker.register("./sw.js?v=20260710-4").catch(() => {
+  navigator.serviceWorker.register("./sw.js?v=20260710-5").catch(() => {
     // The app still works normally if the browser blocks PWA caching.
   });
 }

@@ -70,7 +70,6 @@ main {
 .answer-list,
 .controls,
 .notice,
-.key-diagram,
 .view-tabs {
   background: var(--white);
   border: 1px solid var(--line);
@@ -90,13 +89,6 @@ main {
 .notice strong {
   color: var(--warn);
   white-space: nowrap;
-}
-
-.key-diagram {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding: 16px;
 }
 
 .metric {

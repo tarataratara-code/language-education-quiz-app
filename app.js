@@ -783,6 +783,8 @@ function init() {
   $("summaryTab").addEventListener("click", () => setView("summary"));
   $("startFilteredPractice").addEventListener("click", startFilteredPractice);
   $("mistakePracticeButton").addEventListener("click", startMistakePractice);
+  $("exportProgress").addEventListener("click", exportProgress);
+  $("importProgress").addEventListener("click", importProgress);
   $("shuffleButton").addEventListener("click", () => {
     if (!active.length) return;
     active.sort(() => Math.random() - 0.5);
@@ -985,12 +987,17 @@ function next() {
 }
 
 function updateDashboard() {
-  const records = QUESTIONS.map((question) => state[question.id]).filter(Boolean);
+  const selectedRound = $("roundFilter").value;
+  const dashboardQuestions = selectedRound === "all"
+    ? QUESTIONS
+    : QUESTIONS.filter((question) => question.round === Number(selectedRound));
+  const records = dashboardQuestions.map((question) => state[question.id]).filter(Boolean);
   const attempts = records.reduce((sum, record) => sum + record.attempts, 0);
   const correct = records.reduce((sum, record) => sum + record.correctCount, 0);
-  const mastered = QUESTIONS.filter((question) => state[question.id]?.mastered).length;
-  const remaining = QUESTIONS.length - mastered;
-  $("overallRate").textContent = attempts ? `${Math.round((correct / attempts) * 100)}%` : "0%";
+  const mastered = dashboardQuestions.filter((question) => state[question.id]?.mastered).length;
+  const remaining = dashboardQuestions.length - mastered;
+  $("overallRate").textContent = `${mastered}/${dashboardQuestions.length}`;
+  $("attemptRate").textContent = attempts ? `${Math.round((correct / attempts) * 100)}%` : "0%";
   $("remainingCount").textContent = `${remaining}問`;
   $("streakCount").textContent = String(currentStreak());
 
@@ -1002,6 +1009,43 @@ function updateDashboard() {
     ? weak.map((question) => `<li>${questionGroupLabel(question)} Q${question.no}: ${question.text.slice(0, 42)}...</li>`).join("")
     : "<li>まだ弱点はありません。まず1周してみましょう。</li>";
   renderRoundOptions();
+}
+
+async function exportProgress() {
+  const payload = JSON.stringify({
+    app: "language-education-quiz-app",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    state,
+    overrides,
+  });
+
+  try {
+    await navigator.clipboard.writeText(payload);
+    alert("学習履歴をコピーしました。スマホ側で「履歴読み込み」に貼り付けると反映できます。");
+  } catch {
+    prompt("この学習履歴をコピーしてください。", payload);
+  }
+}
+
+function importProgress() {
+  const payload = prompt("コピーした学習履歴を貼り付けてください。");
+  if (!payload) return;
+
+  try {
+    const imported = JSON.parse(payload);
+    if (imported.app !== "language-education-quiz-app" || !imported.state) {
+      throw new Error("Invalid progress data");
+    }
+    state = imported.state || {};
+    overrides = imported.overrides || {};
+    saveProgress();
+    saveOverrides();
+    rebuild();
+    alert("学習履歴を読み込みました。");
+  } catch {
+    alert("読み込みできませんでした。コピーした文字列が途中で切れていないか確認してください。");
+  }
 }
 
 function setView(view) {

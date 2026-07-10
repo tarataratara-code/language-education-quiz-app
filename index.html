@@ -24,6 +24,8 @@
         <h1>言語・教育 確認問題マスター</h1>
       </div>
       <div class="header-actions">
+        <button id="exportProgress" class="ghost-button" type="button">履歴コピー</button>
+        <button id="importProgress" class="ghost-button" type="button">履歴読み込み</button>
         <button id="resetProgress" class="ghost-button" type="button">履歴リセット</button>
       </div>
     </header>
@@ -31,8 +33,12 @@
     <main>
       <section class="dashboard" aria-label="進捗">
         <div class="metric">
-          <span class="metric-label">総合正答率</span>
-          <strong id="overallRate">0%</strong>
+          <span class="metric-label">セクション正答</span>
+          <strong id="overallRate">0/0</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">回答正答率</span>
+          <strong id="attemptRate">0%</strong>
         </div>
         <div class="metric">
           <span class="metric-label">全問正解まで</span>

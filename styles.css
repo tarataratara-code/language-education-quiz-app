@@ -58,7 +58,7 @@ main {
 
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -185,6 +185,13 @@ button {
   border-color: var(--accent);
   font-weight: 700;
   cursor: pointer;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 button:disabled {
@@ -627,8 +634,17 @@ button:disabled {
     flex-direction: column;
   }
 
+  .header-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .header-actions button {
+    flex: 1 1 130px;
+  }
+
   .dashboard {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .diagram-cols {

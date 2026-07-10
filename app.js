@@ -928,7 +928,7 @@ function showResult(question, correct) {
     : question.round <= 10
       ? "補足解説"
       : "解説（解答集に基づく）";
-  $("explanation").textContent = `${explanationLabel}: ${question.explanation}`;
+  $("explanation").textContent = `問題ID: ${question.id} / ${explanationLabel}: ${question.explanation}`;
   const source = answerSourceOf(question);
   const sourceLink = $("answerSourceLink");
   if (source) {
@@ -945,6 +945,12 @@ function showResult(question, correct) {
 }
 
 function renderDiagram(question) {
+  if (question.round >= 101) {
+    $("diagramPanel").hidden = true;
+    $("diagramPanel").innerHTML = "";
+    return;
+  }
+
   const diagramId = QUESTION_DIAGRAMS[question.id];
   const diagram = diagramId ? DIAGRAMS[diagramId] : null;
   const panel = $("diagramPanel");
@@ -1087,7 +1093,7 @@ function summaryCard(question) {
   return `
     <article class="summary-card${className}">
       <div class="summary-meta">
-        <span>${questionGroupLabel(question)} Q${question.no}</span>
+        <span>${questionGroupLabel(question)} Q${question.no} / ID: ${question.id}</span>
         <span class="status-pill ${status.className}">${status.label}</span>
       </div>
       <p class="summary-question">${escapeHtml(question.text)}</p>
@@ -1138,7 +1144,7 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol === "file:") return;
 
-  navigator.serviceWorker.register("./sw.js?v=20260710-5").catch(() => {
+  navigator.serviceWorker.register("./sw.js?v=20260710-6").catch(() => {
     // The app still works normally if the browser blocks PWA caching.
   });
 }

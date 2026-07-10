@@ -375,6 +375,12 @@ button:disabled {
   font-weight: 700;
 }
 
+.method-history span {
+  border-radius: 8px;
+  flex: 1 1 130px;
+  text-align: center;
+}
+
 .mini-table {
   width: 100%;
   border-collapse: collapse;

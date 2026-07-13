@@ -1220,6 +1220,22 @@ function next() {
   render();
 }
 
+function setMeter(id, value) {
+  const percent = Math.max(0, Math.min(100, Math.round(value)));
+  $(id).textContent = `${percent}%`;
+  $(`${id}Bar`).style.width = `${percent}%`;
+}
+
+function coachTextFor(dailyPercent) {
+  if (dailyPercent >= 80) {
+    return "頑張ったね！今日の応用タスクはしっかり進んでいます。20時は間違いと自信なしだけ見直せば十分です。";
+  }
+  if (dailyPercent >= 50) {
+    return "半分以上進んでいます。ここまで来られたのは大きいです。残りは1問ずつ、弱点だけ拾いましょう。";
+  }
+  return "初心に戻って頑張ろう！絶対に一緒に合格しようね。今から1問だけ、教授法か評価法を触れば流れは戻せます。";
+}
+
 function updateDashboard() {
   const selectedRound = $("roundFilter").value;
   const dashboardQuestions = selectedRound === "all"
@@ -1230,10 +1246,19 @@ function updateDashboard() {
   const correct = records.reduce((sum, record) => sum + record.correctCount, 0);
   const correctQuestions = dashboardQuestions.filter((question) => isCorrectForProgress(state[question.id])).length;
   const remaining = dashboardQuestions.length - correctQuestions;
+  const allRecords = QUESTIONS.map((question) => state[question.id]).filter(Boolean);
+  const allCorrectQuestions = QUESTIONS.filter((question) => isCorrectForProgress(state[question.id])).length;
+  const dailyPercent = dashboardQuestions.length ? (records.length / dashboardQuestions.length) * 100 : 0;
+  const volumeProgress = QUESTIONS.length ? (allRecords.length / QUESTIONS.length) * 100 : 0;
+  const understandingProgress = QUESTIONS.length ? (allCorrectQuestions / QUESTIONS.length) * 100 : 0;
+  const passProgress = (volumeProgress * 0.5) + (understandingProgress * 0.4) + (Math.min(100, dailyPercent) * 0.1);
   $("overallRate").textContent = `${correctQuestions}/${dashboardQuestions.length}`;
   $("attemptRate").textContent = attempts ? `${Math.round((correct / attempts) * 100)}%` : "0%";
   $("remainingCount").textContent = `${remaining}問`;
   $("streakCount").textContent = String(currentStreak());
+  setMeter("dailyCompletion", dailyPercent);
+  setMeter("passProgress", passProgress);
+  $("coachMessage").textContent = coachTextFor(dailyPercent);
 
   const weak = QUESTIONS.filter((question) => {
     const record = state[question.id];

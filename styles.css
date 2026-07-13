@@ -106,6 +106,82 @@ main {
   font-size: 1.6rem;
 }
 
+.coach-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #cfe3dc;
+  border-radius: 8px;
+  background: #f5fbf8;
+  box-shadow: 0 6px 18px rgba(47, 125, 109, 0.08);
+}
+
+.coach-progress {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.coach-progress > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.coach-label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.coach-progress strong {
+  color: var(--accent-strong);
+  font-size: 1.35rem;
+}
+
+.coach-bar {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #d8ebe5;
+}
+
+.coach-bar div {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+}
+
+.coach-message {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--white);
+  border: 1px solid #d8ebe5;
+  line-height: 1.7;
+}
+
+.coach-schedule {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.coach-schedule span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e7f4ef;
+  color: var(--accent-strong);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
 .view-tabs {
   display: flex;
   gap: 8px;
@@ -803,6 +879,10 @@ button:disabled {
 
   .dashboard {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .coach-dashboard {
+    grid-template-columns: 1fr;
   }
 
   .diagram-cols {

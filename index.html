@@ -12,10 +12,10 @@
       content="言語・教育の確認問題、復習、解説をスマホでも使いやすく学習できるミニアプリです。"
     />
     <title>言語・教育 確認問題マスター</title>
-    <link rel="manifest" href="./manifest.webmanifest?v=20260710-11" />
+    <link rel="manifest" href="./manifest.webmanifest?v=20260713-1" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./icons/icon.svg" />
-    <link rel="stylesheet" href="./styles.css?v=20260710-11" />
+    <link rel="stylesheet" href="./styles.css?v=20260713-1" />
   </head>
   <body>
     <header class="app-header">
@@ -47,6 +47,28 @@
         <div class="metric">
           <span class="metric-label">連続正解</span>
           <strong id="streakCount">0</strong>
+        </div>
+      </section>
+
+      <section class="coach-dashboard" aria-label="伴走コーチ">
+        <div class="coach-progress">
+          <div>
+            <span class="coach-label">今日の消化率</span>
+            <strong id="dailyCompletion">0%</strong>
+          </div>
+          <div class="coach-bar" aria-hidden="true"><div id="dailyCompletionBar"></div></div>
+        </div>
+        <div class="coach-progress">
+          <div>
+            <span class="coach-label">合格までの達成率</span>
+            <strong id="passProgress">0%</strong>
+          </div>
+          <div class="coach-bar" aria-hidden="true"><div id="passProgressBar"></div></div>
+        </div>
+        <p id="coachMessage" class="coach-message">朝8時に今日の言語と教育タスク、20時に答え合わせと復習メッセージを送る前提で進めます。</p>
+        <div class="coach-schedule">
+          <span>8:00 今日の応用タスク</span>
+          <span>20:00 答え合わせ・弱点回収</span>
         </div>
       </section>
 
@@ -149,7 +171,7 @@
       </section>
     </main>
 
-    <script src="./tcj-data.js?v=20260710-11"></script>
-    <script src="./app.js?v=20260710-11"></script>
+    <script src="./tcj-data.js?v=20260713-1"></script>
+    <script src="./app.js?v=20260713-1"></script>
   </body>
 </html>

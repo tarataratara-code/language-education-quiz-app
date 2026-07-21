@@ -994,6 +994,7 @@ function loadProgress() {
 
 function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  notifyProgressChanged();
 }
 
 function loadOverrides() {
@@ -1006,6 +1007,32 @@ function loadOverrides() {
 
 function saveOverrides() {
   localStorage.setItem(OVERRIDE_KEY, JSON.stringify(overrides));
+  notifyProgressChanged();
+}
+
+function notifyProgressChanged() {
+  window.dispatchEvent(new CustomEvent("language-education-progress-changed"));
+}
+
+function getProgressSnapshot() {
+  return {
+    app: "language-education-quiz-app",
+    version: 1,
+    state: JSON.parse(JSON.stringify(state)),
+    overrides: JSON.parse(JSON.stringify(overrides)),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function applyProgressSnapshot(snapshot) {
+  if (!snapshot || snapshot.app !== "language-education-quiz-app" || !snapshot.state) return false;
+  state = snapshot.state || {};
+  overrides = snapshot.overrides || {};
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(OVERRIDE_KEY, JSON.stringify(overrides));
+  rebuild();
+  renderSummary();
+  return true;
 }
 
 function answerOf(question) {
@@ -1484,10 +1511,15 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol === "file:") return;
 
-  navigator.serviceWorker.register("./sw.js?v=20260721-1").catch(() => {
+  navigator.serviceWorker.register("./sw.js?v=20260721-2").catch(() => {
     // The app still works normally if the browser blocks PWA caching.
   });
 }
+
+window.LanguageEducationApp = {
+  getProgressSnapshot,
+  applyProgressSnapshot,
+};
 
 init();
 registerServiceWorker();

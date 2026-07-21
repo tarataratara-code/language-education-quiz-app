@@ -15,7 +15,7 @@
     <link rel="manifest" href="./manifest.webmanifest?v=20260713-1" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./icons/icon.svg" />
-    <link rel="stylesheet" href="./styles.css?v=20260721-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260721-2" />
   </head>
   <body>
     <header class="app-header">
@@ -29,6 +29,22 @@
         <button id="resetProgress" class="ghost-button" type="button">履歴リセット</button>
       </div>
     </header>
+
+    <section class="cloud-sync-bar" aria-label="Googleアカウントと学習履歴の同期">
+      <div class="cloud-sync-inner">
+        <div class="cloud-sync-state">
+          <span id="cloudStatusDot" class="cloud-status-dot" aria-hidden="true"></span>
+          <div>
+            <strong id="cloudStatus">この端末に保存中</strong>
+            <span id="cloudUser">Googleログインでパソコンとスマホを自動同期できます</span>
+          </div>
+        </div>
+        <div class="cloud-sync-actions">
+          <button id="googleSignIn" type="button">Googleでログイン</button>
+          <button id="googleSignOut" class="ghost-button" type="button" hidden>ログアウト</button>
+        </div>
+      </div>
+    </section>
 
     <main>
       <section class="dashboard" aria-label="進捗">
@@ -177,8 +193,10 @@
       </section>
     </main>
 
+    <script src="./firebase-config.js?v=20260721-2"></script>
     <script src="./tcj-data.js?v=20260713-1"></script>
     <script src="./redbook-written-data.js?v=20260721-1"></script>
-    <script src="./app.js?v=20260721-1"></script>
+    <script src="./app.js?v=20260721-2"></script>
+    <script type="module" src="./cloud-sync.js?v=20260721-2"></script>
   </body>
 </html>

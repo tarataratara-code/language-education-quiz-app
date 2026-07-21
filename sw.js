@@ -1,9 +1,11 @@
-const CACHE_NAME = "language-education-quiz-app-v13";
+const CACHE_NAME = "language-education-quiz-app-v14";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20260721-1",
-  "./app.js?v=20260721-1",
+  "./styles.css?v=20260721-2",
+  "./app.js?v=20260721-2",
+  "./firebase-config.js?v=20260721-2",
+  "./cloud-sync.js?v=20260721-2",
   "./tcj-data.js?v=20260713-1",
   "./redbook-written-data.js?v=20260721-1",
   "./manifest.webmanifest?v=20260713-1",
@@ -29,6 +31,7 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+  if (new URL(event.request.url).origin !== self.location.origin) return;
 
   event.respondWith(
     fetch(event.request)

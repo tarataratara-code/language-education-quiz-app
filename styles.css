@@ -37,6 +37,74 @@ body {
   border-bottom: 1px solid var(--line);
 }
 
+.cloud-sync-bar {
+  border-bottom: 1px solid var(--line);
+  background: #eef8f4;
+}
+
+.cloud-sync-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 12px clamp(14px, 3vw, 28px);
+}
+
+.cloud-sync-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cloud-sync-state div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cloud-sync-state strong,
+.cloud-sync-state span {
+  overflow-wrap: anywhere;
+}
+
+.cloud-sync-state span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.cloud-status-dot {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  border-radius: 50%;
+  background: #98a2b3;
+}
+
+.cloud-status-dot.syncing {
+  background: #d89014;
+}
+
+.cloud-status-dot.synced {
+  background: var(--good);
+}
+
+.cloud-status-dot.error {
+  background: var(--bad);
+}
+
+.cloud-sync-actions {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.cloud-sync-actions button {
+  white-space: nowrap;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: var(--accent);
@@ -406,6 +474,15 @@ button:disabled {
 }
 
 @media (max-width: 520px) {
+  .cloud-sync-inner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cloud-sync-actions button {
+    flex: 1 1 0;
+  }
+
   .written-grade-buttons button {
     flex: 1 1 100%;
   }

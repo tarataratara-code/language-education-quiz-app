@@ -1,13 +1,14 @@
-const CACHE_NAME = "language-education-quiz-app-v14";
+const CACHE_NAME = "language-education-quiz-app-v15";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20260721-2",
-  "./app.js?v=20260721-2",
+  "./styles.css?v=20260721-3",
+  "./app.js?v=20260721-3",
   "./firebase-config.js?v=20260721-2",
   "./cloud-sync.js?v=20260721-2",
   "./tcj-data.js?v=20260713-1",
   "./redbook-written-data.js?v=20260721-1",
+  "./notion-materials.js?v=20260721-1",
   "./manifest.webmanifest?v=20260713-1",
   "./icons/icon.svg",
   "./icons/maskable-icon.svg"

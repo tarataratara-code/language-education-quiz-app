@@ -15,7 +15,7 @@
     <link rel="manifest" href="./manifest.webmanifest?v=20260713-1" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./icons/icon.svg" />
-    <link rel="stylesheet" href="./styles.css?v=20260721-2" />
+    <link rel="stylesheet" href="./styles.css?v=20260721-3" />
   </head>
   <body>
     <header class="app-header">
@@ -96,6 +96,7 @@
       <section class="view-tabs" aria-label="表示切り替え">
         <button id="practiceTab" class="tab-button active" type="button">練習</button>
         <button id="summaryTab" class="tab-button" type="button">一覧</button>
+        <button id="materialsTab" class="tab-button" type="button">まとめ資料</button>
       </section>
 
       <section id="practiceView">
@@ -191,12 +192,26 @@
           <div id="summaryList"></div>
         </section>
       </section>
+
+      <section id="materialsView" class="materials-view" hidden>
+        <header class="materials-header">
+          <div>
+            <p class="materials-kicker">Notion資料をアプリ内に整理</p>
+            <h2>言語・文化 課末テストまとめ</h2>
+            <p>見たい分野を選び、要点と図を一緒に確認できます。</p>
+          </div>
+          <a href="https://luck-find-20c.notion.site/38cab17e79958019b0f8ecabc0b972e3" target="_blank" rel="noreferrer">元資料を開く</a>
+        </header>
+        <nav id="materialsIndex" class="materials-index" aria-label="まとめ資料の分野"></nav>
+        <div id="materialsList" class="materials-list"></div>
+      </section>
     </main>
 
     <script src="./firebase-config.js?v=20260721-2"></script>
     <script src="./tcj-data.js?v=20260713-1"></script>
     <script src="./redbook-written-data.js?v=20260721-1"></script>
-    <script src="./app.js?v=20260721-2"></script>
+    <script src="./notion-materials.js?v=20260721-1"></script>
+    <script src="./app.js?v=20260721-3"></script>
     <script type="module" src="./cloud-sync.js?v=20260721-2"></script>
   </body>
 </html>

@@ -1060,6 +1060,7 @@ function init() {
   $("summaryFilter").addEventListener("change", renderSummary);
   $("practiceTab").addEventListener("click", () => setView("practice"));
   $("summaryTab").addEventListener("click", () => setView("summary"));
+  $("materialsTab").addEventListener("click", () => setView("materials"));
   $("startFilteredPractice").addEventListener("click", startFilteredPractice);
   $("mistakePracticeButton").addEventListener("click", startMistakePractice);
   $("exportProgress").addEventListener("click", exportProgress);
@@ -1085,6 +1086,7 @@ function init() {
 
   rebuild();
   renderSummary();
+  renderMaterials();
 }
 
 function renderRoundOptions() {
@@ -1422,9 +1424,56 @@ function setView(view) {
   currentView = view;
   $("practiceView").hidden = view !== "practice";
   $("summaryView").hidden = view !== "summary";
+  $("materialsView").hidden = view !== "materials";
   $("practiceTab").classList.toggle("active", view === "practice");
   $("summaryTab").classList.toggle("active", view === "summary");
+  $("materialsTab").classList.toggle("active", view === "materials");
   if (view === "summary") renderSummary();
+}
+
+function renderMaterials() {
+  const materials = Array.isArray(window.NOTION_MATERIALS) ? window.NOTION_MATERIALS : [];
+  $("materialsIndex").innerHTML = materials
+    .map((section) => `<button type="button" data-material-target="${escapeHtml(section.id)}">${escapeHtml(section.title)}</button>`)
+    .join("");
+  $("materialsList").innerHTML = materials
+    .map((section, sectionIndex) => `
+      <details id="material-${escapeHtml(section.id)}" class="material-section"${sectionIndex === 0 ? " open" : ""}>
+        <summary>
+          <span>${escapeHtml(section.title)}</span>
+          <small>${section.figures.length}図</small>
+        </summary>
+        <div class="material-content">
+          <p class="material-lead">${escapeHtml(section.lead)}</p>
+          <h3>ここを押さえる</h3>
+          <ul>${section.points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
+          <aside class="exam-focus">
+            <strong>試験で問われやすい形</strong>
+            <p>${escapeHtml(section.exam)}</p>
+          </aside>
+          <div class="material-figures">
+            ${section.figures.map(([file, caption]) => `
+              <figure>
+                <a href="./materials/notion/${escapeHtml(file)}" target="_blank">
+                  <img src="./materials/notion/${escapeHtml(file)}" alt="${escapeHtml(caption)}" loading="lazy" />
+                </a>
+                <figcaption>${escapeHtml(caption)}<span>タップで拡大</span></figcaption>
+              </figure>
+            `).join("")}
+          </div>
+        </div>
+      </details>
+    `)
+    .join("");
+
+  $("materialsIndex").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-material-target]");
+    if (!button) return;
+    const section = $(`material-${button.dataset.materialTarget}`);
+    if (!section) return;
+    section.open = true;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
 
 function questionsBySummaryFilter() {

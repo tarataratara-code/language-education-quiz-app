@@ -416,6 +416,19 @@ const tcjQuestionNumbers = {};
   QUESTIONS.push(q(round, tcjQuestionNumbers[round], item.question, choices, correct, item.explanation));
 });
 
+(globalThis.REDBOOK_WRITTEN_QUESTIONS || []).forEach((item) => {
+  QUESTIONS.push({
+    id: `redbook-written-r${item.round}-q${item.no}`,
+    round: item.round,
+    no: item.no,
+    text: item.text,
+    type: "written",
+    choices: [],
+    answerText: item.answerText,
+    explanation: item.explanation,
+  });
+});
+
 const ROUND_LABELS = {
   12: "赤本 第2章 評価",
   13: "赤本 第3章 異文化間教育",
@@ -434,6 +447,12 @@ const ROUND_LABELS = {
   26: "【深掘り】著作権対策",
   27: "【整理】人物・理論・教授法",
   28: "【整理】評価・採点指標",
+  301: "【赤本・記述】1. 日本語教育とは",
+  302: "【赤本・記述】2. 外国語教授法",
+  303: "【赤本・記述】6. 指導法",
+  304: "【赤本・記述】7. 訂正フィードバック",
+  305: "【赤本・記述】第2章 評価",
+  306: "【赤本・記述】第4章 言語教育と情報",
 };
 
 for (let section = 1; section <= 20; section += 1) {
@@ -1026,6 +1045,9 @@ function init() {
   });
   $("answerButton").addEventListener("click", checkAnswer);
   $("nextButton").addEventListener("click", next);
+  $("writtenDone").addEventListener("click", () => gradeWritten("done"));
+  $("writtenWeak").addEventListener("click", () => gradeWritten("weak"));
+  $("writtenCouldnt").addEventListener("click", () => gradeWritten("couldnt"));
   $("markSelectedCorrect").addEventListener("click", markSelectedCorrect);
   $("resetProgress").addEventListener("click", () => {
     if (!confirm("学習履歴をリセットしますか？")) return;
@@ -1094,19 +1116,30 @@ function render() {
   $("questionMeta").textContent = `${questionGroupLabel(question)} Q${question.no}`;
   $("questionTitle").textContent = `Q${question.no}`;
   $("questionText").textContent = question.text;
-  $("choices").innerHTML = question.choices
-    .map(
-      (choice, choiceIndex) => `
-        <label class="choice">
-          <input type="radio" name="choice" value="${choiceIndex}" />
-          <span>${choice}</span>
-        </label>
-      `,
-    )
-    .join("");
+  if (question.type === "written") {
+    const previousResponse = state[question.id]?.lastResponse || "";
+    $("choices").innerHTML = `
+      <label class="written-answer-label" for="writtenAnswer">自分の答え</label>
+      <textarea id="writtenAnswer" class="written-answer" rows="4" placeholder="ここに答えを書いてください">${escapeHtml(previousResponse)}</textarea>
+    `;
+  } else {
+    $("choices").innerHTML = question.choices
+      .map(
+        (choice, choiceIndex) => `
+          <label class="choice">
+            <input type="radio" name="choice" value="${choiceIndex}" />
+            <span>${choice}</span>
+          </label>
+        `,
+      )
+      .join("");
+  }
   $("uncertainCheck").checked = false;
+  $("uncertainCheck").closest("label").hidden = question.type === "written";
   $("resultPanel").hidden = true;
+  $("writtenGradeButtons").hidden = true;
   $("answerButton").disabled = false;
+  $("answerButton").textContent = question.type === "written" ? "解答と解説を見る" : "回答する";
   $("nextButton").disabled = true;
   updateDashboard();
 }
@@ -1118,6 +1151,15 @@ function selectedChoice() {
 
 function checkAnswer() {
   const question = active[index];
+  if (question.type === "written") {
+    const response = $("writtenAnswer").value.trim();
+    if (!response) {
+      alert("まず自分の答えを書いてください。");
+      return;
+    }
+    showWrittenResult(question, response);
+    return;
+  }
   const selected = selectedChoice();
   if (selected === null) {
     alert("選択肢を選んでください。");
@@ -1158,6 +1200,8 @@ function showResult(question, correct) {
       ? "補足解説"
       : "解説（解答集に基づく）";
   $("explanation").textContent = `問題ID: ${question.id} / ${explanationLabel}: ${question.explanation}`;
+  $("writtenGradeButtons").hidden = true;
+  $("correctionBox").hidden = false;
   const source = answerSourceOf(question);
   const sourceLink = $("answerSourceLink");
   if (source) {
@@ -1171,6 +1215,46 @@ function showResult(question, correct) {
   renderDiagram(question);
   $("answerButton").disabled = true;
   $("nextButton").disabled = false;
+}
+
+function showWrittenResult(question, response) {
+  $("resultPanel").hidden = false;
+  $("resultBadge").className = "result-badge";
+  $("resultBadge").textContent = "自己採点してください";
+  $("answerLine").textContent = `解答: ${question.answerText}`;
+  $("explanation").textContent = `解説: ${question.explanation}`;
+  $("answerSourceLink").hidden = true;
+  $("diagramPanel").hidden = true;
+  $("diagramPanel").innerHTML = "";
+  $("correctionBox").hidden = true;
+  $("writtenGradeButtons").hidden = false;
+  $("writtenGradeButtons").dataset.response = response;
+  $("answerButton").disabled = true;
+  $("nextButton").disabled = true;
+}
+
+function gradeWritten(status) {
+  const question = active[index];
+  if (!question || question.type !== "written") return;
+  const response = $("writtenGradeButtons").dataset.response || "";
+  const prev = state[question.id] || { attempts: 0, correctCount: 0 };
+  const correct = status === "done";
+  state[question.id] = {
+    attempts: prev.attempts + 1,
+    correctCount: prev.correctCount + (correct ? 1 : 0),
+    lastCorrect: correct,
+    uncertain: status === "weak",
+    mastered: correct,
+    lastResponse: response,
+    writtenStatus: status,
+    updatedAt: new Date().toISOString(),
+  };
+  saveProgress();
+  $("resultBadge").className = `result-badge ${correct ? "good" : "bad"}`;
+  $("resultBadge").textContent = status === "done" ? "できた" : status === "weak" ? "苦手" : "できなかった";
+  $("writtenGradeButtons").hidden = true;
+  $("nextButton").disabled = false;
+  updateDashboard();
 }
 
 function renderDiagram(question) {
@@ -1339,7 +1423,9 @@ function summaryCard(question) {
   const record = state[question.id];
   const status = summaryStatus(record);
   const className = record?.lastCorrect === false ? " mistake" : record?.mastered ? " mastered" : "";
-  const selected = Number.isInteger(record?.lastSelected) ? question.choices[record.lastSelected] : "未回答";
+  const selected = question.type === "written"
+    ? record?.lastResponse || "未回答"
+    : Number.isInteger(record?.lastSelected) ? question.choices[record.lastSelected] : "未回答";
   const source = answerSourceOf(question);
   const sourceHtml = source
     ? `<p class="summary-explanation"><a href="./resources/${source.file}#page=${source.page}" target="_blank">${escapeHtml(source.label)}を開く</a></p>`
@@ -1351,8 +1437,8 @@ function summaryCard(question) {
         <span class="status-pill ${status.className}">${status.label}</span>
       </div>
       <p class="summary-question">${escapeHtml(question.text)}</p>
-      <p class="summary-answer"><strong>答え:</strong> ${escapeHtml(question.choices[answerOf(question)])}</p>
-      <p class="summary-answer"><strong>前回の選択:</strong> ${escapeHtml(selected)}</p>
+      <p class="summary-answer"><strong>答え:</strong> ${escapeHtml(question.type === "written" ? question.answerText : question.choices[answerOf(question)])}</p>
+      <p class="summary-answer"><strong>${question.type === "written" ? "自分の前回答" : "前回の選択"}:</strong> ${escapeHtml(selected)}</p>
       <p class="summary-explanation"><strong>解説:</strong> ${escapeHtml(question.explanation)}</p>
       ${sourceHtml}
     </article>
@@ -1398,7 +1484,7 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol === "file:") return;
 
-  navigator.serviceWorker.register("./sw.js?v=20260710-11").catch(() => {
+  navigator.serviceWorker.register("./sw.js?v=20260721-1").catch(() => {
     // The app still works normally if the browser blocks PWA caching.
   });
 }

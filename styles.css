@@ -343,6 +343,31 @@ button:disabled {
   margin-top: 4px;
 }
 
+.written-answer-label {
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.written-answer {
+  width: 100%;
+  min-height: 116px;
+  box-sizing: border-box;
+  resize: vertical;
+  padding: 14px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.written-answer:focus {
+  outline: 3px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  border-color: var(--accent);
+}
+
 .uncertain-row {
   display: inline-flex;
   gap: 8px;
@@ -359,6 +384,31 @@ button:disabled {
 
 .result-panel {
   padding: 18px;
+}
+
+.written-grade-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.written-grade-buttons[hidden] {
+  display: none;
+}
+
+.written-grade-buttons p {
+  flex: 1 0 100%;
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (max-width: 520px) {
+  .written-grade-buttons button {
+    flex: 1 1 100%;
+  }
 }
 
 .answer-source-link {

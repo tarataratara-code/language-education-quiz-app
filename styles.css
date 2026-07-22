@@ -989,6 +989,12 @@ button:disabled {
   color: var(--accent-strong);
 }
 
+.result-next-button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 14px;
+}
+
 .materials-view {
   display: grid;
   gap: 16px;

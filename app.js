@@ -1073,6 +1073,7 @@ function init() {
   });
   $("answerButton").addEventListener("click", checkAnswer);
   $("nextButton").addEventListener("click", next);
+  $("resultNextButton").addEventListener("click", next);
   $("writtenDone").addEventListener("click", () => gradeWritten("done"));
   $("writtenWeak").addEventListener("click", () => gradeWritten("weak"));
   $("writtenCouldnt").addEventListener("click", () => gradeWritten("couldnt"));
@@ -1244,6 +1245,7 @@ function showResult(question, correct) {
   renderDiagram(question);
   $("answerButton").disabled = true;
   $("nextButton").disabled = false;
+  $("resultNextButton").disabled = false;
 }
 
 function showWrittenResult(question, response) {
@@ -1259,7 +1261,8 @@ function showWrittenResult(question, response) {
   $("writtenGradeButtons").hidden = false;
   $("writtenGradeButtons").dataset.response = response;
   $("answerButton").disabled = true;
-  $("nextButton").disabled = true;
+  $("nextButton").disabled = false;
+  $("resultNextButton").disabled = false;
 }
 
 function gradeWritten(status) {
@@ -1331,6 +1334,7 @@ function next() {
   if (!active.length) return;
   index = (index + 1) % active.length;
   render();
+  document.querySelector(".quiz-shell")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function setMeter(id, value) {

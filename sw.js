@@ -1,9 +1,9 @@
-const CACHE_NAME = "language-education-quiz-app-v16";
+const CACHE_NAME = "language-education-quiz-app-v17";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css?v=20260722-1",
-  "./app.js?v=20260722-1",
+  "./app.js?v=20260723-1",
   "./firebase-config.js?v=20260721-2",
   "./cloud-sync.js?v=20260721-2",
   "./tcj-data.js?v=20260713-1",
